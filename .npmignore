@@ -1,0 +1,53 @@
+# Source files
+src/
+examples/
+*.vue
+*.js
+*.ts
+!index.js
+!index.d.ts
+
+# Development files
+.git/
+.gitignore
+.npmignore
+rollup.config.js
+tsconfig.json
+package-lock.json
+yarn.lock
+
+# Documentation
+README.md
+CHANGELOG.md
+LICENSE
+
+# Build tools
+node_modules/
+.vscode/
+.idea/
+
+# Test files
+test/
+tests/
+__tests__/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# Development dependencies
+.eslintrc*
+.prettierrc*
+jest.config*
+vitest.config*
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env*
+
+# OS
+.DS_Store
+Thumbs.db

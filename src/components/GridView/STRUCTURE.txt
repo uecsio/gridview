@@ -1,0 +1,185 @@
+GridView Component Structure
+============================
+
+┌─────────────────────────────────────────────────────────────────┐
+│                         index.vue (230 lines)                    │
+│                        Main Orchestrator                         │
+│                                                                   │
+│  Responsibilities:                                                │
+│  • Compose all composables                                       │
+│  • Render vue-good-table-next                                    │
+│  • Manage extended filter UI state                               │
+│  • Provide template slots                                        │
+└─────────────────────────────────────────────────────────────────┘
+                                 │
+                                 │ uses
+                                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                          COMPOSABLES                              │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  useGridQuery.js (176 lines)                                     │
+│  ├─ Data fetching with TanStack Query                            │
+│  ├─ URL building with filters                                    │
+│  ├─ Automatic caching (30s)                                      │
+│  └─ Returns: gridData, updateParams, refetch                     │
+│                                                                   │
+│  useGridEvents.js (79 lines)                                     │
+│  ├─ Event handlers (pagination, sort, filter, selection)         │
+│  ├─ Filter processing and mapping                                │
+│  └─ Returns: onPageChange, onSortChange, onColumnFilter...       │
+│                                                                   │
+│  useGridConfig.js (47 lines)                                     │
+│  ├─ Pagination options                                           │
+│  ├─ Sort options                                                 │
+│  ├─ Selection options                                            │
+│  └─ Returns: paginationOptions, sortOptions, selectOptions       │
+│                                                                   │
+│  useGridColumns.js (32 lines)                                    │
+│  ├─ Column translation                                           │
+│  ├─ Column module initialization                                 │
+│  └─ Returns: translatedColumns                                   │
+│                                                                   │
+│  useGridActions.js (38 lines)                                    │
+│  ├─ Action parameter management                                  │
+│  ├─ API base URL                                                 │
+│  └─ Returns: actionParams, loadItems                             │
+│                                                                   │
+└─────────────────────────────────────────────────────────────────┘
+                                 │
+                                 │ uses
+                                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                         SUB-COMPONENTS                            │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  GridActionsCell.vue (68 lines)                                  │
+│  ├─ Renders action buttons/links                                 │
+│  ├─ Route actions (router-link)                                  │
+│  ├─ Callback actions (click handler)                             │
+│  └─ Icon and label support                                       │
+│                                                                   │
+│  GridFilterCell.vue (91 lines)                                   │
+│  ├─ Renders filter inputs                                        │
+│  ├─ Text, Select, DateRange types                                │
+│  ├─ Unified event handling                                       │
+│  └─ i18n support                                                 │
+│                                                                   │
+│  DateRangeFilter.vue (243 lines)                                 │
+│  ├─ Date range picker (@vuepic/vue-datepicker)                   │
+│  ├─ CoreUI styling                                               │
+│  ├─ Locale support                                               │
+│  └─ Formatted output (YYYY-MM-DD,YYYY-MM-DD)                     │
+│                                                                   │
+└─────────────────────────────────────────────────────────────────┘
+
+
+Data Flow Diagram
+=================
+
+User Types in Filter
+        │
+        ▼
+GridFilterCell.vue
+(captures input, emits event)
+        │
+        ▼
+vue-good-table-next
+(@on-column-filter)
+        │
+        ▼
+useGridEvents.onColumnFilter
+(processes & maps filters)
+        │
+        ▼
+useGridQuery.updateParams
+(updates serverParams ref)
+        │
+        ▼
+TanStack Query
+(detects queryKey change)
+        │
+        ▼
+useGridQuery.fetchGridData
+(builds URL & fetches)
+        │
+        ▼
+API Response
+        │
+        ▼
+TanStack Query Cache
+(stores for 30s)
+        │
+        ▼
+useGridQuery.gridData
+(reactive computed)
+        │
+        ▼
+index.vue
+(renders table with new data)
+
+
+File Size Comparison
+====================
+
+BEFORE REFACTORING:
+├── index.vue ............................ 400 lines (monolithic)
+├── components/DateRangeFilter.vue ....... 243 lines
+└── Total: 643 lines
+
+AFTER REFACTORING:
+├── index.vue ............................ 230 lines (-170)
+├── composables/
+│   ├── useGridQuery.js .................. 176 lines
+│   ├── useGridEvents.js ................. 79 lines
+│   ├── useGridConfig.js ................. 47 lines
+│   ├── useGridColumns.js ................ 32 lines
+│   └── useGridActions.js ................ 38 lines
+├── components/
+│   ├── GridActionsCell.vue .............. 68 lines
+│   ├── GridFilterCell.vue ............... 91 lines
+│   └── DateRangeFilter.vue .............. 243 lines
+├── ARCHITECTURE.md ...................... 270 lines (docs)
+├── REFACTORING_SUMMARY.md ............... 230 lines (docs)
+└── Total: 1,504 lines (+861 lines including docs)
+
+Net increase: 861 lines
+But average file size: ~150 lines (much easier to work with!)
+
+
+Key Benefits
+============
+
+✓ Separation of Concerns
+  Each file has ONE clear responsibility
+
+✓ Testability
+  Each composable can be unit tested independently
+
+✓ Reusability
+  Composables can be used in other components
+
+✓ Maintainability
+  Easier to find, fix, and extend code
+
+✓ Performance
+  TanStack Query handles caching automatically
+
+✓ Developer Experience
+  Smaller files, better IDE support, clearer imports
+
+✓ Documentation
+  Comprehensive docs for architecture and usage
+
+
+Technology Stack
+================
+
+├── Vue 3 Composition API
+├── TanStack Query (Vue Query) ........... Data fetching & caching
+├── vue-good-table-next .................. Table UI
+├── @vuepic/vue-datepicker ............... Date picker
+├── Vue i18n ............................. Internationalization
+├── Vue Router ........................... Navigation
+└── CoreUI Vue ........................... UI framework
+
