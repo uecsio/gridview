@@ -1,5 +1,5 @@
 import { ref, computed, watch } from 'vue'
-import { useQuery } from '@tanstack/vue-query'
+import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import environmentService from '@/services/environment.service.js'
 
 /**
@@ -7,6 +7,9 @@ import environmentService from '@/services/environment.service.js'
  * Handles caching, refetching, and loading states automatically
  */
 export function useGridQuery(props) {
+  // Get query client for cache management
+  const queryClient = useQueryClient()
+  
   // Server parameters
   const serverParams = ref({
     page: 1,
@@ -172,6 +175,8 @@ export function useGridQuery(props) {
     updateParams,
     updateSelectedRows,
     refetch,
+    clearCache,
+    invalidateCache,
     isLoading,
     isError,
     error
