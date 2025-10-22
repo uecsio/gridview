@@ -206,6 +206,16 @@ export declare const CommonCurrencyFormatter: FormatterFunction
 export declare const CommonEditAction: Component<CommonEditActionProps>
 export declare const CommonDeleteAction: Component<CommonDeleteActionProps>
 
+// Cache Management Exports
+export declare function getQueryClient(): any
+export declare function clearGridCache(gridId: string): void
+export declare function clearAllGridCache(): void
+export declare function invalidateGridCache(gridId: string): void
+export declare function invalidateAllGridCache(): void
+export declare function clearAllCache(): void
+export declare function clearCacheByKey(queryKey: any[]): void
+export declare function invalidateCacheByKey(queryKey: any[]): void
+
 // Utility Exports
 export declare const GridUtils: {
   formatDate: (date: Date | string, format: string) => string
