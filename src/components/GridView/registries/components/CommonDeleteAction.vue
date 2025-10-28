@@ -64,16 +64,7 @@ const handleDelete = async () => {
   isDeleting.value = true
   
   try {
-    const response = await fetch(`${props.actionParams.url}/${props.row.id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
+    await props.actionParams.apiClient.delete(`${props.actionParams.url}/${props.row.id}`)
     
     // Emit success event
     emit('deleted', props.row)

@@ -8,6 +8,7 @@
 // Import common action components
 import CommonDeleteAction from './components/CommonDeleteAction.vue'
 import CommonEditAction from './components/CommonEditAction.vue'
+import CommonStatusAction from './components/CommonStatusAction.vue'
 
 /**
  * Registry of available action components
@@ -17,6 +18,7 @@ export const actionComponents = {
   // Common components (reusable across modules)
   'CommonDeleteAction': CommonDeleteAction,
   'CommonEditAction': CommonEditAction,
+  'CommonStatusAction': CommonStatusAction,
 }
 
 /**

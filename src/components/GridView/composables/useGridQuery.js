@@ -1,6 +1,6 @@
 import { ref, computed, watch } from 'vue'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
-import environmentService from '@/services/environment.service.js'
+import { createApiClient } from '@uecsio/api-client'
 
 /**
  * Composable for fetching grid data using TanStack Query
@@ -9,6 +9,23 @@ import environmentService from '@/services/environment.service.js'
 export function useGridQuery(props) {
   // Get query client for cache management
   const queryClient = useQueryClient()
+  
+  // Initialize API client based on props
+  let apiClient
+  if (props.apiClient) {
+    // Use provided apiClient
+    apiClient = props.apiClient
+  } else if (props.baseUrl) {
+    // Create new apiClient with baseUrl
+    apiClient = createApiClient({ baseURL: props.baseUrl })
+  } else {
+    // Throw clear error if neither is provided
+    throw new Error(
+      'GridView requires either "apiClient" or "baseUrl" prop. ' +
+      'Please provide one of these props to configure API requests.\n' +
+      'Example: <GridView :api-client="myApiClient" ... /> or <GridView base-url="https://api.example.com" ... />'
+    )
+  }
   
   // Server parameters
   const serverParams = ref({
@@ -91,13 +108,7 @@ export function useGridQuery(props) {
   // Fetch function for TanStack Query
   const fetchGridData = async () => {
     const url = buildUrl()
-    const response = await fetch(url)
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    
-    const result = await response.json()
+    const result = await apiClient.get(url)
     
     // Handle checkbox selection
     if (props.enableCheckboxes && result.data) {
@@ -169,6 +180,15 @@ export function useGridQuery(props) {
     refetch()
   })
 
+  // Cache management functions
+  const clearCache = () => {
+    queryClient.removeQueries({ queryKey: ['grid', props.id] })
+  }
+
+  const invalidateCache = () => {
+    queryClient.invalidateQueries({ queryKey: ['grid', props.id] })
+  }
+
   return {
     gridData,
     serverParams,
@@ -179,7 +199,8 @@ export function useGridQuery(props) {
     invalidateCache,
     isLoading,
     isError,
-    error
+    error,
+    apiClient
   }
 }
 

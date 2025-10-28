@@ -1,33 +1,34 @@
-import { useQueryClient } from '@tanstack/vue-query'
+import {
+  getQueryClient,
+  clearCache,
+  invalidateCache,
+  clearAllCache as clearAll
+} from '@query-cache/vue'
 
 /**
  * GridView Cache Manager
- * Provides utilities for managing TanStack Query cache from external code
+ * Wrapper around @query-cache/vue for GridView-specific cache operations
  */
 
 /**
  * Get the query client instance
  * @returns {QueryClient} The TanStack Query client
  */
-export function getQueryClient() {
-  return useQueryClient()
-}
+export { getQueryClient }
 
 /**
  * Clear cache for a specific grid by ID
  * @param {string} gridId - The ID of the grid to clear cache for
  */
 export function clearGridCache(gridId) {
-  const queryClient = useQueryClient()
-  queryClient.removeQueries({ queryKey: ['grid', gridId] })
+  clearCache(['grid', gridId])
 }
 
 /**
  * Clear cache for all grids
  */
 export function clearAllGridCache() {
-  const queryClient = useQueryClient()
-  queryClient.removeQueries({ queryKey: ['grid'] })
+  clearCache(['grid'])
 }
 
 /**
@@ -35,24 +36,21 @@ export function clearAllGridCache() {
  * @param {string} gridId - The ID of the grid to invalidate cache for
  */
 export function invalidateGridCache(gridId) {
-  const queryClient = useQueryClient()
-  queryClient.invalidateQueries({ queryKey: ['grid', gridId] })
+  invalidateCache(['grid', gridId])
 }
 
 /**
  * Invalidate cache for all grids
  */
 export function invalidateAllGridCache() {
-  const queryClient = useQueryClient()
-  queryClient.invalidateQueries({ queryKey: ['grid'] })
+  invalidateCache(['grid'])
 }
 
 /**
  * Clear all TanStack Query cache (not just grids)
  */
 export function clearAllCache() {
-  const queryClient = useQueryClient()
-  queryClient.clear()
+  clearAll()
 }
 
 /**
@@ -60,8 +58,7 @@ export function clearAllCache() {
  * @param {Array} queryKey - Custom query key to clear
  */
 export function clearCacheByKey(queryKey) {
-  const queryClient = useQueryClient()
-  queryClient.removeQueries({ queryKey })
+  clearCache(queryKey)
 }
 
 /**
@@ -69,7 +66,6 @@ export function clearCacheByKey(queryKey) {
  * @param {Array} queryKey - Custom query key to invalidate
  */
 export function invalidateCacheByKey(queryKey) {
-  const queryClient = useQueryClient()
-  queryClient.invalidateQueries({ queryKey })
+  invalidateCache(queryKey)
 }
 
