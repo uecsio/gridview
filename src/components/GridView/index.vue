@@ -196,10 +196,20 @@ const props = defineProps({
     required: false,
     default: () => ({}),
   },
+  apiClient: {
+    type: Object,
+    required: false,
+    default: null,
+  },
+  baseUrl: {
+    type: String,
+    required: false,
+    default: null,
+  },
 })
 
 // Use TanStack Query for grid data management
-const { gridData, updateParams, updateSelectedRows, refetch } = useGridQuery(props)
+const { gridData, updateParams, updateSelectedRows, refetch, apiClient } = useGridQuery(props)
 
 // Use grid event handlers composable
 const { 
@@ -223,7 +233,7 @@ const translatedColumns = computed(() => {
 })
 
 // Use grid actions composable
-const { actionParams, loadItems } = useGridActions(props, refetch)
+const { actionParams, loadItems } = useGridActions(props, refetch, apiClient)
 
 // Use formatters composable
 const { processColumns } = useFormatters(props.moduleFormatters, t)
