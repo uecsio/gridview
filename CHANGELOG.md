@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2024-10-28
+
+### Added
+- **CommonStatusAction Component**: New action component for toggling status values (active/hidden)
+  - Click to toggle between status 1 (active) and 0 (hidden)
+  - Visual feedback with FontAwesome icons (check/ban)
+  - Color-coded status indicators (green for active, red for hidden)
+  - Loading state with spinner during API calls
+  - Automatic grid refresh after status change
+  - Support for custom status field names
+  - Customizable success/error messages
+  - Events: `updated`, `error`
+
+### Changed
+- **BREAKING**: Integrated @uecsio/api-client for all HTTP requests
+  - Replaced native fetch() with @uecsio/api-client across all components
+  - Added `apiClient` prop to GridView component for passing configured API client instance
+  - Added `baseUrl` prop to GridView component for automatic API client creation
+  - Removed dependency on consumer's environmentService (now requires explicit configuration)
+  - All action components now use apiClient from actionParams
+  - **Migration**: You must now pass either `apiClient` or `baseUrl` prop to GridView component
+
+### Fixed
+- Improved error handling with centralized API client
+- Better TypeScript support with typed API responses
+- More consistent authentication token handling across requests
+
+### Security
+- Removed implicit dependency on consumer's environment service
+- Explicit configuration required for API requests (fail-fast with helpful errors)
+- Better isolation between library and consumer code
+
+### Dependencies
+- Added @uecsio/api-client ^1.0.0 as peer dependency
+
 ## [1.0.5] - 2024-10-13
 
 ### Fixed

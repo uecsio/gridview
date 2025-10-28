@@ -1,6 +1,6 @@
 {
   "name": "@uecsio/gridview",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "A powerful, flexible Vue 3 grid component with built-in pagination, sorting, filtering, and CRUD operations",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
