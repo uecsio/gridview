@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2024-10-29
+
+### Removed
+- Removed unused `@uecsio/query-cache` dependency
+- Cleaned up package.json (removed empty dependencies section)
+
+### Improved
+- Reduced package footprint by removing unnecessary dependencies
+- Better package structure with only peer and dev dependencies
+
 ## [1.1.0] - 2024-10-28
 
 ### Added
