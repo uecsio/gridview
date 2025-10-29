@@ -3,11 +3,11 @@ import {
   clearCache,
   invalidateCache,
   clearAllCache as clearAll
-} from '@query-cache/vue'
+} from '@uecsio/query-cache'
 
 /**
  * GridView Cache Manager
- * Wrapper around @query-cache/vue for GridView-specific cache operations
+ * Wrapper around @uecsio/query-cache for GridView-specific cache operations
  */
 
 /**
