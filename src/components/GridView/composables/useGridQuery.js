@@ -40,7 +40,7 @@ export function useGridQuery(props) {
 
   // Build API URL with all parameters
   const buildUrl = () => {
-    const host = environmentService.getApiBaseUrl()
+    const host = apiClient.getBaseUrl()
     let url = `${host}${props.path}?page=${serverParams.value.page}&limit=${serverParams.value.perPage}`
     
     // Add sorting
