@@ -43,9 +43,6 @@
     "url": "https://github.com/uecsio/gridview/issues"
   },
   "homepage": "https://github.com/uecsio/gridview#readme",
-  "dependencies": {
-    "@uecsio/query-cache": "^1.0.0"
-  },
   "peerDependencies": {
     "vue": "^3.0.0",
     "@tanstack/vue-query": "^4.0.0 || ^5.0.0",

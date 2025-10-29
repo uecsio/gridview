@@ -37,18 +37,6 @@ export {
   hasActionComponent 
 } from './src/components/GridView/registries/actionComponents.js'
 
-// Export cache management utilities
-export {
-  getQueryClient,
-  clearGridCache,
-  clearAllGridCache,
-  invalidateGridCache,
-  invalidateAllGridCache,
-  clearAllCache,
-  clearCacheByKey,
-  invalidateCacheByKey
-} from './src/components/GridView/utils/cacheManager.js'
-
 // Export common formatters (available through formatters registry)
 export { commonFormatters } from './src/components/GridView/registries/formatters.js'
 
