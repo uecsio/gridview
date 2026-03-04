@@ -6,6 +6,11 @@
  */
 
 import GridView from './src/components/GridView/index.vue'
+import GridActionsCell from './src/components/GridView/components/GridActionsCell.vue'
+import GridFilterCell from './src/components/GridView/components/GridFilterCell.vue'
+import DateRangeFilter from './src/components/GridView/components/DateRangeFilter.vue'
+import CommonEditAction from './src/components/GridView/registries/components/CommonEditAction.vue'
+import CommonDeleteAction from './src/components/GridView/registries/components/CommonDeleteAction.vue'
 
 // Export main component
 export { GridView }
@@ -19,30 +24,27 @@ export { useGridActions } from './src/components/GridView/composables/useGridAct
 export { useFormatters } from './src/components/GridView/composables/useFormatters.js'
 
 // Export sub-components
-export { default as GridActionsCell } from './src/components/GridView/components/GridActionsCell.vue'
-export { default as GridFilterCell } from './src/components/GridView/components/GridFilterCell.vue'
-export { default as DateRangeFilter } from './src/components/GridView/components/DateRangeFilter.vue'
+export { GridActionsCell, GridFilterCell, DateRangeFilter }
 
 // Export registries
-export { 
-  registerCommonFormatter, 
-  getCommonFormatter, 
+export {
+  registerCommonFormatter,
+  getCommonFormatter,
   hasCommonFormatter,
-  getCommonFormatterNames 
+  getCommonFormatterNames
 } from './src/components/GridView/registries/formatters.js'
 
-export { 
-  registerActionComponent, 
-  getActionComponent, 
-  hasActionComponent 
+export {
+  registerActionComponent,
+  getActionComponent,
+  hasActionComponent
 } from './src/components/GridView/registries/actionComponents.js'
 
 // Export common formatters (available through formatters registry)
 export { commonFormatters } from './src/components/GridView/registries/formatters.js'
 
 // Export common action components
-export { default as CommonEditAction } from './src/components/GridView/registries/components/CommonEditAction.vue'
-export { default as CommonDeleteAction } from './src/components/GridView/registries/components/CommonDeleteAction.vue'
+export { CommonEditAction, CommonDeleteAction }
 
 // Note: GridUtils not available in this version
 
