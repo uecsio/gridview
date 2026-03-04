@@ -1,40 +1,35 @@
 <template>
   <div :id="id">
-    <CRow class="mt-3">
-      <CCol :md="4" :lg="3" :sm="12">
-        <CButton 
-          v-if="extendedFilterSchema && Object.keys(extendedFilterSchema).length > 0" 
-          color="primary" 
-          class="w-100"
+    <div class="gv-toolbar">
+      <div class="gv-toolbar-item">
+        <button
+          v-if="extendedFilterSchema && Object.keys(extendedFilterSchema).length > 0"
+          class="gv-btn gv-btn-primary"
           @click="updateExtendedFilterVisibility"
         >
-          <CIcon icon="cilSearch" class="me-2" />
+          <svg xmlns="http://www.w3.org/2000/svg" class="gv-btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
           {{ $t('grid.extendedSearch') }}
-        </CButton>
-      </CCol>
-      <CCol :md="4" :lg="3" :sm="12" :offset-md="6" class="ms-auto" v-if="addRoute">
+        </button>
+      </div>
+      <div class="gv-toolbar-item gv-toolbar-item--end" v-if="addRoute">
         <router-link :to="{ name: addRoute, params: addRouteParams }">
-          <CButton color="success" class="w-100">
-            <CIcon icon="cilPlus" class="me-2" />
+          <button class="gv-btn gv-btn-success">
+            <svg xmlns="http://www.w3.org/2000/svg" class="gv-btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
             {{ addText }}
-          </CButton>
+          </button>
         </router-link>
-      </CCol>
-      <CCol :sm="12" v-if="showExtendedFilter">
-        <br />
-        <CCard>
-          <CCardHeader>
-            <strong>{{ $t('grid.extendedSearch') }}</strong>
-          </CCardHeader>
-          <CCardBody>
+      </div>
+      <div class="gv-toolbar-item--full" v-if="showExtendedFilter">
+        <div class="gv-card">
+          <div class="gv-card-body">
+            <h2 class="gv-card-title">{{ $t('grid.extendedSearch') }}</h2>
             <!-- Extended filter form will go here -->
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
+          </div>
+        </div>
+      </div>
+    </div>
     <br />
-    <CRow class="justify-content-center">
-      <CCol :md="12">
+    <div>
         <vue-good-table
           ref="table"
           mode="remote"
@@ -53,8 +48,8 @@
           v-on:selected-rows-change="onSelectionChanged"
         >
           <template #loadingContent>
-            <div style="margin: auto; text-align: center; padding: 2rem;">
-              <CSpinner color="primary" />
+            <div class="gv-loading-wrap">
+              <span class="gv-spinner"></span>
             </div>
           </template>
           
@@ -82,8 +77,7 @@
             />
           </template>
         </vue-good-table>
-      </CCol>
-    </CRow>
+    </div>
     <br />
   </div>
 </template>
@@ -103,6 +97,7 @@ import GridActionsCell from './components/GridActionsCell.vue'
 import GridFilterCell from './components/GridFilterCell.vue'
 
 // Import GridView-specific styles
+import './styles/gridview-base.css'
 import './styles/action-links.scss'
 
 const { t } = useI18n()
@@ -341,9 +336,4 @@ const handleActionEvent = (event) => {
   vertical-align: top !important;
 }
 
-.sort-icon {
-  margin-left: 0.5rem;
-  font-size: 0.75rem;
-  color: var(--cui-primary, #321fdb);
-}
 </style>

@@ -122,7 +122,7 @@ onBeforeUnmount(() => {
   width: 100%;
 }
 
-/* Input field styling to match CoreUI */
+/* Input field styling */
 :deep(.dp__input_wrap) {
   width: 100%;
 }
@@ -133,10 +133,10 @@ onBeforeUnmount(() => {
   font-family: inherit;
   font-weight: 400;
   line-height: 1.5;
-  color: var(--cui-body-color, #4f5d73);
-  background-color: var(--cui-body-bg, #fff);
+  color: #4f5d73;
+  background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid var(--cui-input-border-color, #b1b7c1);
+  border: 1px solid #b1b7c1;
   border-radius: 0.375rem;
   appearance: none;
   padding: 0.375rem 2rem 0.375rem 0.75rem;
@@ -145,26 +145,26 @@ onBeforeUnmount(() => {
 }
 
 :deep(.dp__input:hover) {
-  border-color: var(--cui-input-border-color, #b1b7c1);
+  border-color: #b1b7c1;
 }
 
 :deep(.dp__input:focus) {
-  color: var(--cui-body-color, #4f5d73);
-  background-color: var(--cui-body-bg, #fff);
+  color: #4f5d73;
+  background-color: #fff;
   border-color: #b1b7c1;
   outline: 0;
   box-shadow: none;
 }
 
 :deep(.dp__input::placeholder) {
-  color: var(--cui-input-placeholder-color, #8a93a2);
+  color: #8a93a2;
   opacity: 1;
 }
 
 :deep(.dp__input_icon) {
   right: 0.75rem;
   left: auto;
-  color: var(--cui-body-color, #4f5d73);
+  color: #4f5d73;
 }
 
 :deep(.dp__clear_icon) {
@@ -174,18 +174,18 @@ onBeforeUnmount(() => {
 /* Calendar popup styling */
 :deep(.dp__menu) {
   font-family: inherit;
-  border: 1px solid var(--cui-border-color, #d8dbe0);
+  border: 1px solid #d8dbe0;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 21, 0.15);
   border-radius: 0.375rem;
 }
 
 :deep(.dp__calendar_header) {
   font-weight: 600;
-  color: var(--cui-body-color, #4f5d73);
+  color: #4f5d73;
 }
 
 :deep(.dp__calendar_header_item) {
-  color: var(--cui-body-color, #4f5d73);
+  color: #4f5d73;
   font-weight: 500;
   font-size: 0.875rem;
 }
@@ -195,19 +195,19 @@ onBeforeUnmount(() => {
 }
 
 :deep(.dp__today) {
-  border: 1px solid var(--cui-primary, #321fdb);
+  border: 1px solid #321fdb;
 }
 
 :deep(.dp__active_date),
 :deep(.dp__range_start),
 :deep(.dp__range_end) {
-  background-color: var(--cui-primary, #321fdb);
+  background-color: #321fdb;
   color: #fff;
 }
 
 :deep(.dp__range_between) {
   background-color: rgba(50, 31, 219, 0.1);
-  color: var(--cui-body-color, #4f5d73);
+  color: #4f5d73;
 }
 
 :deep(.dp__cell_inner:hover) {
@@ -216,16 +216,16 @@ onBeforeUnmount(() => {
 
 :deep(.dp__month_year_select:hover) {
   background-color: rgba(50, 31, 219, 0.1);
-  color: var(--cui-body-color, #4f5d73);
+  color: #4f5d73;
 }
 
 :deep(.dp__arrow_top),
 :deep(.dp__arrow_bottom) {
-  color: var(--cui-body-color, #4f5d73);
+  color: #4f5d73;
 }
 
 :deep(.dp__button) {
-  background-color: var(--cui-primary, #321fdb);
+  background-color: #321fdb;
   color: #fff;
   border-radius: 0.25rem;
   font-size: 0.875rem;
@@ -236,7 +236,7 @@ onBeforeUnmount(() => {
 }
 
 :deep(.dp__button_bottom) {
-  border-top: 1px solid var(--cui-border-color, #d8dbe0);
+  border-top: 1px solid #d8dbe0;
 }
 </style>
 
