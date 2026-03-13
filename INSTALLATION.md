@@ -11,7 +11,7 @@ npm install @uecsio/gridview
 ### 2. Install Peer Dependencies
 
 ```bash
-npm install vue@^3.0.0 @tanstack/vue-query@^4.0.0 vue-good-table-next@^0.1.0 @vuepic/vue-datepicker@^4.0.0 @coreui/vue@^5.0.0 @coreui/icons-vue@^2.0.0 vue-i18n@^9.0.0 @fortawesome/fontawesome-svg-core@^6.0.0 @fortawesome/free-solid-svg-icons@^6.0.0 @fortawesome/vue-fontawesome@^3.0.0 date-fns@^2.0.0
+npm install vue@^3.0.0 @tanstack/vue-query@^4.0.0 vue-good-table-next@^0.1.0 @vuepic/vue-datepicker@^4.0.0 vue-i18n@^9.0.0 @fortawesome/fontawesome-svg-core@^6.0.0 @fortawesome/free-solid-svg-icons@^6.0.0 @fortawesome/vue-fontawesome@^3.0.0 date-fns@^2.0.0
 ```
 
 ### 4. Setup in Your Vue App
@@ -152,7 +152,7 @@ registerActionComponent('CustomAction', CustomAction)
 
 1. **Missing peer dependencies**: Make sure all peer dependencies are installed
 2. **i18n not working**: Ensure vue-i18n is properly configured
-3. **Styling issues**: Check that CoreUI CSS is imported
+3. **Styling issues**: Check that GridView CSS is imported (`@uecsio/gridview/dist/index.css`)
 4. **Icons not showing**: Verify FontAwesome is properly configured
 
 ### Getting Help

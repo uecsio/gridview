@@ -26,7 +26,7 @@ npm install @uecsio/gridview
 Make sure you have these peer dependencies installed:
 
 ```bash
-npm install vue@^3.0.0 @tanstack/vue-query@^4.0.0 vue-good-table-next@^0.1.0 @vuepic/vue-datepicker@^4.0.0 @coreui/vue@^5.0.0 @coreui/icons-vue@^2.0.0 vue-i18n@^9.0.0 @fortawesome/fontawesome-svg-core@^6.0.0 @fortawesome/free-solid-svg-icons@^6.0.0 @fortawesome/vue-fontawesome@^3.0.0 date-fns@^2.0.0
+npm install vue@^3.0.0 @tanstack/vue-query@^4.0.0 vue-good-table-next@^0.1.0 @vuepic/vue-datepicker@^4.0.0 vue-i18n@^9.0.0 @fortawesome/fontawesome-svg-core@^6.0.0 @fortawesome/free-solid-svg-icons@^6.0.0 @fortawesome/vue-fontawesome@^3.0.0 date-fns@^2.0.0
 ```
 
 ## 🚀 Quick Start
@@ -381,7 +381,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Vue.js](https://vuejs.org/) - The Progressive JavaScript Framework
 - [TanStack Query](https://tanstack.com/query) - Powerful data synchronization
 - [vue-good-table-next](https://github.com/xaksis/vue-good-table-next) - Vue 3 table component
-- [CoreUI](https://coreui.io/) - Bootstrap-based UI components
 - [Vue i18n](https://kazupon.github.io/vue-i18n/) - Internationalization plugin
 
 ## 📞 Support

@@ -29,7 +29,7 @@
         :style="action.style"
         :title="action.titleKey ? $t(action.titleKey) : action.title"
       >
-        <CIcon v-if="action.icon" :content="action.icon" />
+        <FontAwesomeIcon v-if="action.icon" :icon="action.icon" />
         <span v-else>{{ action.labelKey ? $t(action.labelKey) : action.label }}</span>
       </router-link>
     </span>

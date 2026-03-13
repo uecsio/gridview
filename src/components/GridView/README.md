@@ -11,7 +11,7 @@ A Vue 3 data table component built on top of `vue-good-table-next` with server-s
 - ✅ Custom actions (route links and callbacks)
 - ✅ Loading states
 - ✅ Internationalization (i18n) support
-- ✅ Responsive design with CoreUI styling
+- ✅ Responsive design with Tailwind CSS styling
 - ✅ Automatic caching with TanStack Query
 - ✅ Smart refetching and stale data management
 - ✅ Extended filter support (planned)
@@ -241,7 +241,7 @@ This ensures proper caching and invalidation when parameters change.
 
 ## Styling
 
-The component uses CoreUI classes and can be customized via SCSS variables. It includes:
+The component uses Tailwind CSS utility classes and can be customized via CSS variables. It includes:
 - Responsive grid layout
 - Loading states with spinner
 - Custom table styling

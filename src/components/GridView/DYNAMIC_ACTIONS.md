@@ -60,12 +60,18 @@ Create action components with standard Vue component structure:
 
 ```vue
 <template>
-  <CButton @click="handleAction" :disabled="isLoading">
-    <CIcon :content="icon" />
-  </CButton>
+  <button
+    class="inline-flex items-center px-2 py-1 text-sm rounded hover:bg-gray-100 disabled:opacity-50"
+    @click="handleAction"
+    :disabled="isLoading"
+  >
+    <FontAwesomeIcon :icon="icon" />
+  </button>
 </template>
 
 <script setup>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 const props = defineProps({
   row: Object,
   allRows: Array,
@@ -152,24 +158,23 @@ emit('error', error)
 
 ```vue
 <template>
-  <CButton
-    color="danger"
-    size="sm"
+  <button
+    class="inline-flex items-center px-2 py-1 text-sm text-red-600 rounded hover:bg-red-50 disabled:opacity-50"
     @click="handleDelete"
     :disabled="isDeleting"
   >
-    <CIcon v-if="!isDeleting" :content="cilTrash" />
-    <CSpinner v-else size="sm" />
-  </CButton>
+    <FontAwesomeIcon v-if="!isDeleting" icon="trash-alt" />
+    <FontAwesomeIcon v-else icon="spinner" spin />
+  </button>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { cilTrash } from '@coreui/icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const props = defineProps({
   row: Object,
-  allRows: Array, 
+  allRows: Array,
   actionParams: Object,
   loadItems: Function
 })
@@ -178,7 +183,7 @@ const isDeleting = ref(false)
 
 const handleDelete = async () => {
   if (!confirm('Are you sure?')) return
-  
+
   isDeleting.value = true
   try {
     await fetch(`${props.actionParams.url}/${props.row.id}`, {
@@ -198,20 +203,21 @@ const handleDelete = async () => {
 
 ```vue
 <template>
-  <router-link :to="{ name: 'Update Order', params: { id: row.id } }">
-    <CButton color="primary" size="sm">
-      <CIcon :content="cilPencil" />
-    </CButton>
+  <router-link
+    :to="{ name: 'Update Order', params: { id: row.id } }"
+    class="inline-flex items-center px-2 py-1 text-sm text-blue-600 rounded hover:bg-blue-50"
+  >
+    <FontAwesomeIcon icon="edit" />
   </router-link>
 </template>
 
 <script setup>
-import { cilPencil } from '@coreui/icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const props = defineProps({
   row: Object,
   allRows: Array,
-  actionParams: Object, 
+  actionParams: Object,
   loadItems: Function
 })
 </script>
@@ -224,9 +230,13 @@ const props = defineProps({
 ```vue
 <!-- CustomStatusAction.vue -->
 <template>
-  <CButton @click="toggleStatus" :color="statusColor">
+  <button
+    class="inline-flex items-center px-2 py-1 text-sm rounded"
+    :class="statusColor"
+    @click="toggleStatus"
+  >
     {{ statusText }}
-  </CButton>
+  </button>
 </template>
 
 <script setup>
