@@ -52,7 +52,7 @@
               <span class="gv-spinner"></span>
             </div>
           </template>
-          
+
           <template #table-row="props">
             <GridActionsCell
               v-if="props.column.field === 'actions'"
@@ -62,13 +62,14 @@
               :action-params="actionParams"
               :load-items="loadItems"
               :module-action-components="moduleActionComponents"
+              :update-route="updateRoute"
               @action-event="handleActionEvent"
             />
             <div v-else>
               <span v-html="props.formattedRow[props.column.field]" />
             </div>
           </template>
-          
+
           <template #column-filter="{ column, updateFilters }">
             <GridFilterCell
               :column="column"
@@ -243,7 +244,7 @@ const updateExtendedFilterVisibility = () => {
 const onColumnFilterDirect = ({ field, value, column }) => {
   // Get current filters from gridData
   const currentFilters = { ...gridData.value.serverParams.columnFilters }
-  
+
   // Update or remove the filter
   // Treat null, undefined, empty string, and string "null" as "no filter"
   if (value !== null && value !== undefined && value !== '' && value !== 'null') {
@@ -251,12 +252,12 @@ const onColumnFilterDirect = ({ field, value, column }) => {
   } else {
     delete currentFilters[field]
   }
-  
+
   // Build the params object in the same format as vue-good-table-next
   const params = {
     columnFilters: currentFilters
   }
-  
+
   // Call the onColumnFilter handler from useGridEvents
   onColumnFilter(params)
 }
@@ -273,16 +274,16 @@ const getCurrentSort = (field) => {
 // Handle manual header click for sorting
 const handleHeaderClick = (column) => {
   if (!column.sortable) return
-  
+
   const currentSort = getCurrentSort(column.field)
   let newSortType = 'asc'
-  
+
   if (currentSort === 'asc') {
     newSortType = 'desc'
   } else if (currentSort === 'desc') {
     newSortType = 'asc'
   }
-  
+
   // Manually trigger the sort change
   onSortChange([{
     field: column.field,
@@ -293,7 +294,7 @@ const handleHeaderClick = (column) => {
 // Handle events from custom action components
 const handleActionEvent = (event) => {
   console.log('Action event:', event)
-  
+
   switch (event.type) {
     case 'deleted':
       // Could show success notification

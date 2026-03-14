@@ -56,11 +56,11 @@ const dateFormat = (dates) => {
   if (!dates || !Array.isArray(dates) || dates.length !== 2) {
     return ''
   }
-  
+
   try {
     const [start, end] = dates
     if (!start || !end) return ''
-    
+
     const startStr = formatDate(start, 'dd.MM.yyyy')
     const endStr = formatDate(end, 'dd.MM.yyyy')
     return `${startStr} - ${endStr}`
@@ -76,16 +76,16 @@ const handleDateChange = (value) => {
     emit('update', '')
     return
   }
-  
+
   if (Array.isArray(value) && value.length === 2) {
     const [startDate, endDate] = value
-    
+
     if (startDate && endDate) {
       try {
         // Format dates for API
         const start = formatDate(startDate, 'yyyy-MM-dd')
         const end = formatDate(endDate, 'yyyy-MM-dd')
-        
+
         // Emit the date range as a string in format: startDate,endDate
         emit('update', `${start},${end}`)
       } catch (error) {

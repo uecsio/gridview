@@ -8,7 +8,7 @@
 import GridView from './src/components/GridView/index.vue'
 import GridActionsCell from './src/components/GridView/components/GridActionsCell.vue'
 import GridFilterCell from './src/components/GridView/components/GridFilterCell.vue'
-import DateRangeFilter from './src/components/GridView/components/DateRangeFilter.vue'
+import DateRangeFilter from './src/components/GridView/components/filters/DateRangeFilter.vue'
 import CommonEditAction from './src/components/GridView/registries/components/CommonEditAction.vue'
 import CommonDeleteAction from './src/components/GridView/registries/components/CommonDeleteAction.vue'
 
@@ -69,6 +69,9 @@ export default {
     }
   }
 }
+
+// Export constants
+export { DEFAULT_ACTIONS, DEFAULT_ACTIONS_WITHOUT_STATUS } from './src/components/GridView/constants/index.js'
 
 // Version
 export const version = '1.0.0'

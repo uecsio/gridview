@@ -14,6 +14,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const { t } = useI18n()
 
@@ -56,36 +57,36 @@ const isDeleting = ref(false)
 const handleDelete = async () => {
   // Use custom message or default
   const message = props.confirmMessage || t('common.confirmDelete', { item: props.row.name || props.row.id })
-  
+
   if (!confirm(message)) {
     return
   }
-  
+
   isDeleting.value = true
-  
+
   try {
     await props.actionParams.apiClient.delete(`${props.actionParams.url}/${props.row.id}`)
-    
+
     // Emit success event
     emit('deleted', props.row)
-    
+
     // Refresh the grid
     await props.loadItems()
-    
+
     // Show success message if provided
     if (props.successMessage) {
       alert(props.successMessage)
     }
-    
+
   } catch (error) {
     console.error('Error deleting item:', error)
-    
+
     // Emit error event
     emit('error', {
       message: props.errorMessage || t('common.deleteError'),
       error: error
     })
-    
+
     // Show error to user
     alert(props.errorMessage || t('common.deleteError'))
   } finally {

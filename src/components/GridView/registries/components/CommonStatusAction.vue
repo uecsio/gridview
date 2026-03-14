@@ -14,6 +14,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const { t } = useI18n()
 
@@ -75,11 +76,7 @@ const statusClass = computed(() => {
 
 // Get the label for the current status
 const statusLabel = computed(() => {
-  try {
-    return isActive.value ? t('common.status.active') : t('common.status.hidden')
-  } catch (e) {
-    return isActive.value ? 'Active' : 'Hidden'
-  }
+  return isActive.value ? t('common.status.active') : t('common.status.hidden')
 })
 
 // Toggle status handler
@@ -135,21 +132,17 @@ const toggleStatus = async () => {
 
 <style scoped>
 .status-indicator {
-  display: inline-flex;
-  align-items: center;
-  cursor: pointer;
-  text-decoration: none;
-  transition: opacity 0.2s;
+  margin-right: 3px;
 }
 
 .status-indicator:hover {
   opacity: 0.7;
 }
 
-.status-indicator.disabled {
+/* .status-indicator.disabled {
   cursor: not-allowed;
   opacity: 0.5;
-}
+} */
 
 /* Active status - green */
 .status-active {

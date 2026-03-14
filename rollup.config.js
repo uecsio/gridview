@@ -51,7 +51,11 @@ export default defineConfig([
       }),
       postcss({
         extract: true,
-        minimize: true
+        minimize: true,
+        use: ['sass'],
+        sassOptions: {
+          api: 'modern'
+        }
       }),
       typescript({
         tsconfig: './tsconfig.json',

@@ -33,9 +33,9 @@
 </template>
 
 <script setup>
-import { computed, defineProps, defineEmits } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import DateRangeFilter from './DateRangeFilter.vue'
+import DateRangeFilter from './filters/DateRangeFilter.vue'
 
 const { t } = useI18n()
 
