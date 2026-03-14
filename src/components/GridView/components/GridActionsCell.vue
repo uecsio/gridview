@@ -3,7 +3,7 @@
     <span
       v-for="(action, index) in column.actions"
       :key="index"
-      v-show="!action.visibilityResolver || action.visibilityResolver(row)"
+      v-show="isActionVisible(action, row)"
     >
       <component
           :is="getActionComponentByName(action.componentName)"
@@ -25,6 +25,7 @@
 <script setup>
 // defineProps and defineEmits are compiler macros, no import needed
 import { getActionComponent } from '../registries/actionComponents.js'
+import { isActionVisible } from '../composables/useActionVisibility.js'
 
 const props = defineProps({
   column: {

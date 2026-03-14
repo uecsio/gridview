@@ -41,13 +41,16 @@ export interface FilterOption {
   textKey: string
 }
 
+export interface VisibilityCondition {
+  field: string
+  operator: 'eq' | 'neq' | 'cont' | 'in' | 'between'
+  value: any
+}
+
 export interface ActionDefinition {
-  action: {
-    type: 'component' | 'callback'
-    componentName?: string
-    callback?: Function
-  }
+  componentName: string
   props?: Record<string, any>
+  visibleWhen?: VisibilityCondition | VisibilityCondition[]
 }
 
 export interface ColumnModule {
