@@ -11,6 +11,8 @@ import GridFilterCell from './src/components/GridView/components/GridFilterCell.
 import DateRangeFilter from './src/components/GridView/components/filters/DateRangeFilter.vue'
 import CommonEditAction from './src/components/GridView/registries/components/CommonEditAction.vue'
 import CommonDeleteAction from './src/components/GridView/registries/components/CommonDeleteAction.vue'
+import CommonStatusAction from './src/components/GridView/registries/components/CommonStatusAction.vue'
+import CommonToggleAction from './src/components/GridView/registries/components/CommonToggleAction.vue'
 
 // Export main component
 export { GridView }
@@ -44,7 +46,7 @@ export {
 export { commonFormatters } from './src/components/GridView/registries/formatters.js'
 
 // Export common action components
-export { CommonEditAction, CommonDeleteAction }
+export { CommonEditAction, CommonDeleteAction, CommonStatusAction, CommonToggleAction }
 
 // Note: GridUtils not available in this version
 
@@ -62,6 +64,8 @@ export default {
     // Register common action components globally
     app.component('CommonEditAction', CommonEditAction)
     app.component('CommonDeleteAction', CommonDeleteAction)
+    app.component('CommonStatusAction', CommonStatusAction)
+    app.component('CommonToggleAction', CommonToggleAction)
     
     // Provide global options
     if (options.globalOptions) {

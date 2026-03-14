@@ -14,6 +14,7 @@
           :update-route="updateRoute"
           v-bind="action.props || {}"
           @deleted="handleActionEvent('deleted', $event)"
+          @updated="handleActionEvent('updated', $event)"
           @error="handleActionEvent('error', $event)"
         />
     </span>

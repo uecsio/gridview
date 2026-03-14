@@ -150,6 +150,24 @@ export interface CommonDeleteActionProps {
   onDelete?: (id: string) => Promise<void>
 }
 
+export interface ToggleState {
+  value: any
+  icon: string
+  color: string
+  label: string
+}
+
+export interface CommonToggleActionProps {
+  row: any
+  allRows: any[]
+  actionParams: any
+  loadItems: () => void
+  field: string
+  states: [ToggleState, ToggleState]
+  successMessage?: string
+  errorMessage?: string
+}
+
 // Registry Types
 export interface FormatterRegistry {
   registerCommonFormatter: (name: string, formatter: FormatterFunction) => void
@@ -205,6 +223,8 @@ export declare const CommonCurrencyFormatter: FormatterFunction
 // Common Action Component Exports
 export declare const CommonEditAction: Component<CommonEditActionProps>
 export declare const CommonDeleteAction: Component<CommonDeleteActionProps>
+export declare const CommonStatusAction: Component
+export declare const CommonToggleAction: Component<CommonToggleActionProps>
 
 // Cache Management Exports
 export declare function getQueryClient(): any
