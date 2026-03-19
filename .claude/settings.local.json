@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -ri \"coreui\\\\|@coreui\" /Users/dmitry/ucs/gridview --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=.git --include=\"*.vue\" --include=\"*.js\" --include=\"*.ts\" --include=\"*.tsx\" --include=\"*.json\" 2>/dev/null | grep -v \"^Binary\")",
+      "Bash(grep -l \"coreui\\\\|CIcon\\\\|CButton\\\\|CoreUI\" /Users/dmitry/ucs/gridview/*.md 2>/dev/null || echo \"No markdown files with CoreUI\")",
+      "Bash(npm uninstall:*)",
+      "Bash(npm run:*)"
+    ]
+  }
+}

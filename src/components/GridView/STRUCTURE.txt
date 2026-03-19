@@ -67,7 +67,7 @@ GridView Component Structure
 │                                                                   │
 │  DateRangeFilter.vue (243 lines)                                 │
 │  ├─ Date range picker (@vuepic/vue-datepicker)                   │
-│  ├─ CoreUI styling                                               │
+│  ├─ Tailwind CSS styling                                         │
 │  ├─ Locale support                                               │
 │  └─ Formatted output (YYYY-MM-DD,YYYY-MM-DD)                     │
 │                                                                   │
@@ -181,5 +181,5 @@ Technology Stack
 ├── @vuepic/vue-datepicker ............... Date picker
 ├── Vue i18n ............................. Internationalization
 ├── Vue Router ........................... Navigation
-└── CoreUI Vue ........................... UI framework
+└── Tailwind CSS ......................... Utility-first CSS
 

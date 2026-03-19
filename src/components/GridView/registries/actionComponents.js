@@ -9,6 +9,7 @@
 import CommonDeleteAction from './components/CommonDeleteAction.vue'
 import CommonEditAction from './components/CommonEditAction.vue'
 import CommonStatusAction from './components/CommonStatusAction.vue'
+import CommonToggleAction from './components/CommonToggleAction.vue'
 
 /**
  * Registry of available action components
@@ -19,6 +20,7 @@ export const actionComponents = {
   'CommonDeleteAction': CommonDeleteAction,
   'CommonEditAction': CommonEditAction,
   'CommonStatusAction': CommonStatusAction,
+  'CommonToggleAction': CommonToggleAction,
 }
 
 /**

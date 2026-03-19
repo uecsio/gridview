@@ -120,8 +120,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - @tanstack/vue-query 4.0+
 - vue-good-table-next 0.1.0+
 - @vuepic/vue-datepicker 4.0.0+
-- @coreui/vue 5.0.0+
-- @coreui/icons-vue 2.0.0+
 - vue-i18n 9.0.0+
 
 ### Browser Support

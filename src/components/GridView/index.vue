@@ -1,40 +1,48 @@
 <template>
   <div :id="id">
-    <CRow class="mt-3">
-      <CCol :md="4" :lg="3" :sm="12">
-        <CButton 
-          v-if="extendedFilterSchema && Object.keys(extendedFilterSchema).length > 0" 
-          color="primary" 
-          class="w-100"
+    <div class="gv-toolbar">
+      <div class="gv-toolbar-item">
+        <button
+          v-if="extendedFilterSchema && Object.keys(extendedFilterSchema).length > 0"
+          class="gv-btn gv-btn-primary"
           @click="updateExtendedFilterVisibility"
         >
-          <CIcon icon="cilSearch" class="me-2" />
+          <FontAwesomeIcon icon="search" class="gv-btn-icon" />
           {{ $t('grid.extendedSearch') }}
-        </CButton>
-      </CCol>
-      <CCol :md="4" :lg="3" :sm="12" :offset-md="6" class="ms-auto" v-if="addRoute">
-        <router-link :to="{ name: addRoute, params: addRouteParams }">
-          <CButton color="success" class="w-100">
-            <CIcon icon="cilPlus" class="me-2" />
+        </button>
+      </div>
+      <div class="gv-toolbar-item gv-toolbar-item--end" v-if="addRoute">
+        <router-link :to="{ name: addRoute, params: addRouteParams }" class="gv-btn-link">
+          <button class="gv-btn gv-btn-success">
+            <FontAwesomeIcon icon="plus" class="gv-btn-icon" />
             {{ addText }}
-          </CButton>
+          </button>
         </router-link>
-      </CCol>
-      <CCol :sm="12" v-if="showExtendedFilter">
-        <br />
-        <CCard>
-          <CCardHeader>
-            <strong>{{ $t('grid.extendedSearch') }}</strong>
-          </CCardHeader>
-          <CCardBody>
-            <!-- Extended filter form will go here -->
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
+      </div>
+      <div class="gv-toolbar-item--full" v-if="showExtendedFilter">
+        <div class="gv-card">
+          <div class="gv-card-body">
+            <h2 class="gv-card-title">{{ $t('grid.extendedSearch') }}</h2>
+            <vue-form-generator
+              :schema="translatedExtendedSchema"
+              :model="extendedFilterModel"
+              :options="{ validateAfterLoad: false }"
+            />
+            <div class="gv-extended-filter-actions">
+              <button class="gv-btn gv-btn-primary" @click="applyExtendedFilter">
+                <FontAwesomeIcon icon="search" class="gv-btn-icon" />
+                {{ $t('grid.search') }}
+              </button>
+              <button class="gv-btn gv-btn-outline" @click="resetExtendedFilter">
+                {{ $t('grid.reset') }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <br />
-    <CRow class="justify-content-center">
-      <CCol :md="12">
+    <div>
         <vue-good-table
           ref="table"
           mode="remote"
@@ -53,11 +61,11 @@
           v-on:selected-rows-change="onSelectionChanged"
         >
           <template #loadingContent>
-            <div style="margin: auto; text-align: center; padding: 2rem;">
-              <CSpinner color="primary" />
+            <div class="gv-loading-wrap">
+              <span class="gv-spinner"></span>
             </div>
           </template>
-          
+
           <template #table-row="props">
             <GridActionsCell
               v-if="props.column.field === 'actions'"
@@ -67,13 +75,14 @@
               :action-params="actionParams"
               :load-items="loadItems"
               :module-action-components="moduleActionComponents"
+              :update-route="updateRoute"
               @action-event="handleActionEvent"
             />
             <div v-else>
               <span v-html="props.formattedRow[props.column.field]" />
             </div>
           </template>
-          
+
           <template #column-filter="{ column, updateFilters }">
             <GridFilterCell
               :column="column"
@@ -82,14 +91,13 @@
             />
           </template>
         </vue-good-table>
-      </CCol>
-    </CRow>
+    </div>
     <br />
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VueGoodTable } from 'vue-good-table-next'
 import 'vue-good-table-next/dist/vue-good-table-next.css'
@@ -99,10 +107,12 @@ import { useGridConfig } from './composables/useGridConfig.js'
 import { useGridColumns } from './composables/useGridColumns.js'
 import { useGridActions } from './composables/useGridActions.js'
 import { useFormatters } from './composables/useFormatters.js'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GridActionsCell from './components/GridActionsCell.vue'
 import GridFilterCell from './components/GridFilterCell.vue'
 
 // Import GridView-specific styles
+import './styles/gridview-base.css'
 import './styles/action-links.scss'
 
 const { t } = useI18n()
@@ -244,11 +254,54 @@ const updateExtendedFilterVisibility = () => {
   showExtendedFilter.value = !showExtendedFilter.value
 }
 
+// Extended filter form model and translated schema
+const extendedFilterModel = reactive({})
+
+const translatedExtendedSchema = computed(() => {
+  if (!props.extendedFilterSchema?.fields) return { fields: [] }
+  return {
+    ...props.extendedFilterSchema,
+    fields: props.extendedFilterSchema.fields.map(field => ({
+      ...field,
+      label: field.label ? t(field.label) : field.label,
+      placeholder: field.placeholder ? t(field.placeholder) : field.placeholder,
+    }))
+  }
+})
+
+// Apply extended filter values as column filters
+const applyExtendedFilter = () => {
+  const currentFilters = { ...gridData.value.serverParams.columnFilters }
+
+  for (const field of (props.extendedFilterSchema?.fields || [])) {
+    const value = extendedFilterModel[field.model]
+    if (value !== null && value !== undefined && value !== '') {
+      currentFilters[field.model] = value
+    } else {
+      delete currentFilters[field.model]
+    }
+  }
+
+  onColumnFilter({ columnFilters: currentFilters })
+}
+
+// Reset extended filter form and remove its filters
+const resetExtendedFilter = () => {
+  const currentFilters = { ...gridData.value.serverParams.columnFilters }
+
+  for (const field of (props.extendedFilterSchema?.fields || [])) {
+    extendedFilterModel[field.model] = ''
+    delete currentFilters[field.model]
+  }
+
+  onColumnFilter({ columnFilters: currentFilters })
+}
+
 // Direct filter handler (bypasses vue-good-table-next event system)
 const onColumnFilterDirect = ({ field, value, column }) => {
   // Get current filters from gridData
   const currentFilters = { ...gridData.value.serverParams.columnFilters }
-  
+
   // Update or remove the filter
   // Treat null, undefined, empty string, and string "null" as "no filter"
   if (value !== null && value !== undefined && value !== '' && value !== 'null') {
@@ -256,12 +309,12 @@ const onColumnFilterDirect = ({ field, value, column }) => {
   } else {
     delete currentFilters[field]
   }
-  
+
   // Build the params object in the same format as vue-good-table-next
   const params = {
     columnFilters: currentFilters
   }
-  
+
   // Call the onColumnFilter handler from useGridEvents
   onColumnFilter(params)
 }
@@ -278,16 +331,16 @@ const getCurrentSort = (field) => {
 // Handle manual header click for sorting
 const handleHeaderClick = (column) => {
   if (!column.sortable) return
-  
+
   const currentSort = getCurrentSort(column.field)
   let newSortType = 'asc'
-  
+
   if (currentSort === 'asc') {
     newSortType = 'desc'
   } else if (currentSort === 'desc') {
     newSortType = 'asc'
   }
-  
+
   // Manually trigger the sort change
   onSortChange([{
     field: column.field,
@@ -298,7 +351,7 @@ const handleHeaderClick = (column) => {
 // Handle events from custom action components
 const handleActionEvent = (event) => {
   console.log('Action event:', event)
-  
+
   switch (event.type) {
     case 'deleted':
       // Could show success notification
@@ -341,9 +394,4 @@ const handleActionEvent = (event) => {
   vertical-align: top !important;
 }
 
-.sort-icon {
-  margin-left: 0.5rem;
-  font-size: 0.75rem;
-  color: var(--cui-primary, #321fdb);
-}
 </style>

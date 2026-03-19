@@ -1,14 +1,17 @@
 <template>
   <div v-if="column.filterOptions && column.filterOptions.enabled" style="width: 100%">
     <!-- Select Filter -->
-    <CFormSelect
+    <select
       v-if="column.filterOptions.filterType === 'select'"
       :key="`select-${column.field}`"
-      style="width: 100%"
-      :options="selectOptions"
+      class="gv-select"
       @change="handleFilterChange"
-    />
-    
+    >
+      <option v-for="opt in selectOptions" :key="opt.value" :value="opt.value">
+        {{ opt.label }}
+      </option>
+    </select>
+
     <!-- Date Range Filter -->
     <DateRangeFilter
       v-else-if="column.filterOptions.filterType === 'daterange'"
@@ -17,12 +20,12 @@
       :placeholder="placeholder"
       @update="handleFilterChange"
     />
-    
+
     <!-- Text Filter (default) -->
-    <CFormInput
+    <input
       v-else
       :key="`text-${column.field}`"
-      style="width: 100%"
+      class="gv-input"
       @input="handleFilterChange"
       :placeholder="placeholder"
     />
@@ -30,9 +33,9 @@
 </template>
 
 <script setup>
-import { computed, defineProps, defineEmits } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import DateRangeFilter from './DateRangeFilter.vue'
+import DateRangeFilter from './filters/DateRangeFilter.vue'
 
 const { t } = useI18n()
 
@@ -64,15 +67,15 @@ const placeholder = computed(() => {
  */
 const selectOptions = computed(() => {
   const placeholderOption = {
-    value: '',  // Use empty string instead of null for better DOM compatibility
+    value: '',
     label: placeholder.value
   }
-  
+
   const items = (props.column.filterOptions?.items || []).map(item => ({
     value: item.value,
     label: item.textKey ? t(item.textKey) : item.text
   }))
-  
+
   return [placeholderOption, ...items]
 })
 
@@ -80,22 +83,16 @@ const selectOptions = computed(() => {
  * Handle filter change event
  */
 const handleFilterChange = (eventOrValue) => {
-  // Handle different event types from different input components
   let value
-  
+
   if (eventOrValue?.target) {
-    // Standard DOM event from CFormInput or CFormSelect
     value = eventOrValue.target.value
   } else {
-    // Direct value from DateRangeFilter or other custom components
     value = eventOrValue
   }
-  
-  // Call the vue-good-table-next updateFilters callback
+
   props.updateFilters(props.column, value)
-  
-  // Also emit our own event to bypass vue-good-table-next's event system
+
   emit('filter-change', { field: props.column.field, value, column: props.column })
 }
 </script>
-

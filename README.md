@@ -26,7 +26,7 @@ npm install @uecsio/gridview
 Make sure you have these peer dependencies installed:
 
 ```bash
-npm install vue@^3.0.0 @tanstack/vue-query@^4.0.0 vue-good-table-next@^0.1.0 @vuepic/vue-datepicker@^4.0.0 @coreui/vue@^5.0.0 @coreui/icons-vue@^2.0.0 vue-i18n@^9.0.0 @fortawesome/fontawesome-svg-core@^6.0.0 @fortawesome/free-solid-svg-icons@^6.0.0 @fortawesome/vue-fontawesome@^3.0.0 date-fns@^2.0.0
+npm install vue@^3.0.0 @tanstack/vue-query@^4.0.0 vue-good-table-next@^0.1.0 @vuepic/vue-datepicker@^4.0.0 vue-i18n@^9.0.0 @fortawesome/fontawesome-svg-core@^6.0.0 @fortawesome/free-solid-svg-icons@^6.0.0 @fortawesome/vue-fontawesome@^3.0.0 date-fns@^2.0.0
 ```
 
 ## 🚀 Quick Start
@@ -129,18 +129,56 @@ const columns = ordersColumns.columns
 }
 ```
 
-### Column with Filtering
+### Filter Configuration
+
+Filters are configured via `filterOptions` on a column. Set `enabled: true` (or rely on the grid's default) and choose a `filterType`.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `enabled` | Boolean | Enable filtering for this column |
+| `filterType` | `'text'` \| `'select'` \| `'daterange'` | Filter input type |
+| `placeholderKey` | String | i18n key for placeholder text |
+| `placeholder` | String | Static placeholder (fallback if no `placeholderKey`) |
+| `items` | Array | Options for `select` filter (see below) |
+
+Select filter `items` array:
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `value` | any | Option value sent to API |
+| `textKey` | String | i18n key for display text |
+| `text` | String | Static display text (fallback if no `textKey`) |
+
+Filter type determines the query operator sent to the API:
+- `text` → `field||cont||value`
+- `select` → `field||eq||value`
+- `daterange` → `field||between||start,end`
+
+#### Text Filter
+
+```javascript
+{
+  label: 'users.name',
+  field: 'name',
+  filterOptions: {
+    enabled: true,
+    filterType: 'text',
+    placeholderKey: 'grid.filterByName'
+  }
+}
+```
+
+#### Select Filter
 
 ```javascript
 {
   label: 'users.status',
   field: 'status',
-  sortable: true,
   filterOptions: {
+    enabled: true,
     filterType: 'select',
     placeholderKey: 'grid.filterByStatus',
-    options: [
-      { value: '', textKey: 'grid.allStatuses' },
+    items: [
       { value: 1, textKey: 'users.status.active' },
       { value: 0, textKey: 'users.status.inactive' }
     ]
@@ -148,14 +186,14 @@ const columns = ordersColumns.columns
 }
 ```
 
-### Column with Date Range Filter
+#### Date Range Filter
 
 ```javascript
 {
   label: 'orders.createdAt',
   field: 'createdAt',
-  sortable: true,
   filterOptions: {
+    enabled: true,
     filterType: 'daterange',
     placeholderKey: 'grid.filterByDate'
   },
@@ -175,29 +213,60 @@ const columns = ordersColumns.columns
   sortable: false,
   actions: [
     {
-      action: {
-        type: 'component',
-        componentName: 'CommonEditAction'
-      },
+      componentName: 'CommonToggleAction',
       props: {
-        routeName: 'Update User',
-        entityName: 'User'
+        field: 'featured',
+        states: [
+          { value: 1, icon: 'star', color: '#ffc107', label: 'common.featured' },
+          { value: 0, icon: 'star', color: '#ccc', label: 'common.notFeatured' }
+        ]
       }
     },
+    { componentName: 'CommonStatusAction' },
     {
-      action: {
-        type: 'component',
-        componentName: 'CommonDeleteAction'
-      },
-      props: {
-        entityName: 'User',
-        confirmMessageKey: 'users.confirmDelete',
-        errorMessageKey: 'users.deleteError'
-      }
+      componentName: 'CommonEditAction',
+      props: { routeName: 'UpdateUser' }
+    },
+    {
+      componentName: 'CommonDeleteAction',
+      props: { confirmMessage: 'Are you sure?' }
     }
   ]
 }
 ```
+
+Actions can be conditionally hidden per row with `visibleWhen`. The entire config is JSON-serializable — no callback functions.
+
+Single condition:
+
+```javascript
+{
+  componentName: 'CommonDeleteAction',
+  visibleWhen: { field: 'status', operator: 'neq', value: 'protected' }
+}
+```
+
+Multiple conditions (AND — all must match):
+
+```javascript
+{
+  componentName: 'CommonEditAction',
+  visibleWhen: [
+    { field: 'status', operator: 'eq', value: 1 },
+    { field: 'role', operator: 'neq', value: 'guest' }
+  ]
+}
+```
+
+Supported operators:
+
+| Operator | Description | Example value |
+|----------|-------------|---------------|
+| `eq` | Equals | `1`, `"active"` |
+| `neq` | Not equals | `"protected"` |
+| `cont` | Contains (case-insensitive) | `"admin"` |
+| `in` | Value is in array | `[1, 2, 3]` |
+| `between` | Value is in range | `[10, 100]` |
 
 ## 🎨 Formatters
 
@@ -232,18 +301,135 @@ registerCommonFormatter('CustomFormatter', (value, options) => {
 
 ## 🔧 Action Components
 
+### Action Configuration
+
+Each action in the `actions` array has the following structure:
+
+```javascript
+{
+  componentName: 'CommonEditAction',    // Registered component name
+  props: { /* extra props */ },         // Merged into the component as props
+  visibleWhen: { field, operator, value } // Optional: declarative visibility condition
+}
+```
+
+Every action component automatically receives these props from the grid:
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `row` | Object | Current row data |
+| `allRows` | Array | All rows on the current page |
+| `actionParams` | Object | Contains `apiClient`, `url`, and route info |
+| `loadItems` | Function | Call to refresh grid data |
+| `updateRoute` | String | Route name for edit navigation |
+
 ### Built-in Actions
 
-- `CommonEditAction` - Navigate to edit page
-- `CommonDeleteAction` - Delete with confirmation
+#### CommonEditAction
+
+Renders a router-link to the edit page.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `routeName` | String | `null` | Named route override |
+| `routeParamsResolver` | Function | `null` | Custom route object resolver `(row) => route` |
+
+```javascript
+{
+  componentName: 'CommonEditAction',
+  props: {
+    routeName: 'UpdateUser'
+  }
+}
+```
+
+#### CommonDeleteAction
+
+Deletes a row via API with a confirmation dialog.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `confirmMessage` | String | `null` | Custom confirm dialog text |
+| `successMessage` | String | `null` | Alert shown on success |
+| `errorMessage` | String | `null` | Alert shown on error |
+
+Emits: `deleted`, `error`
+
+```javascript
+{
+  componentName: 'CommonDeleteAction',
+  props: {
+    confirmMessage: 'Are you sure?'
+  }
+}
+```
+
+#### CommonStatusAction
+
+Toggles a `status` field between `1` (active) and `0` (hidden). Pre-configured wrapper around `CommonToggleAction` with default icons and colors — no extra props needed.
+
+Emits: `updated`, `error`
+
+```javascript
+{ componentName: 'CommonStatusAction' }
+```
+
+#### CommonToggleAction
+
+Generic binary toggle for any field. PATCHes the row via API and refreshes the grid.
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `field` | String | yes | Model field to toggle |
+| `states` | Array | yes | Exactly 2 state objects (see below) |
+| `successMessage` | String | no | i18n key for success alert |
+| `errorMessage` | String | no | i18n key for error alert |
+
+Each state object:
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `value` | any | The field value this state represents |
+| `icon` | String | FontAwesome icon name |
+| `color` | String | CSS color string |
+| `label` | String | i18n key used as tooltip |
+
+Emits: `updated`, `error`
+
+```javascript
+{
+  componentName: 'CommonToggleAction',
+  props: {
+    field: 'visibility',
+    states: [
+      { value: 1, icon: 'eye', color: '#28a745', label: 'common.visible' },
+      { value: 0, icon: 'eye-slash', color: '#6c757d', label: 'common.hidden' }
+    ]
+  }
+}
+```
+
+### Default Action Presets
+
+```javascript
+import { DEFAULT_ACTIONS, DEFAULT_ACTIONS_WITHOUT_STATUS } from '@uecsio/gridview'
+
+// DEFAULT_ACTIONS = [CommonStatusAction, CommonEditAction, CommonDeleteAction]
+// DEFAULT_ACTIONS_WITHOUT_STATUS = [CommonEditAction, CommonDeleteAction]
+
+const columns = [
+  // ...data columns,
+  { label: 'common.actions', field: 'actions', actions: DEFAULT_ACTIONS }
+]
+```
 
 ### Custom Actions
 
 ```vue
 <!-- CustomAction.vue -->
 <template>
-  <a 
-    href="#" 
+  <a
+    href="#"
     class="action-link"
     @click.prevent="handleAction"
   >
@@ -262,6 +448,15 @@ const handleAction = () => {
   console.log('Custom action for:', props.row)
 }
 </script>
+```
+
+Register and use:
+
+```javascript
+import { registerActionComponent } from '@uecsio/gridview'
+import CustomAction from './CustomAction.vue'
+
+registerActionComponent('CustomAction', CustomAction)
 ```
 
 ## 🌐 Internationalization
@@ -381,7 +576,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Vue.js](https://vuejs.org/) - The Progressive JavaScript Framework
 - [TanStack Query](https://tanstack.com/query) - Powerful data synchronization
 - [vue-good-table-next](https://github.com/xaksis/vue-good-table-next) - Vue 3 table component
-- [CoreUI](https://coreui.io/) - Bootstrap-based UI components
 - [Vue i18n](https://kazupon.github.io/vue-i18n/) - Internationalization plugin
 
 ## 📞 Support

@@ -131,7 +131,7 @@ GridView/
 #### `DateRangeFilter.vue`
 **Role**: Date range selection
 - Uses `@vuepic/vue-datepicker`
-- Styled to match CoreUI
+- Styled with Tailwind CSS utilities
 - Supports locale switching
 - Emits formatted date strings (`YYYY-MM-DD,YYYY-MM-DD`)
 

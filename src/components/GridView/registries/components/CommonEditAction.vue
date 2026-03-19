@@ -6,9 +6,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const props = defineProps({
   row: {
@@ -35,6 +33,11 @@ const props = defineProps({
   routeParamsResolver: {
     type: Function,
     default: null
+  },
+  // Passed down from GridView via GridActionsCell
+  updateRoute: {
+    type: String,
+    default: ''
   }
 })
 
@@ -44,7 +47,7 @@ const editRoute = computed(() => {
   if (props.routeParamsResolver) {
     return props.routeParamsResolver(props.row)
   }
-  
+
   // Use custom route name if provided
   if (props.routeName) {
     return {
@@ -52,12 +55,20 @@ const editRoute = computed(() => {
       params: { id: props.row.id }
     }
   }
-  
+
+  // Use updateRoute passed from GridView
+  if (props.updateRoute) {
+    return {
+      name: props.updateRoute,
+      params: { id: props.row.id }
+    }
+  }
+
   // Default route pattern: "Update {EntityName}"
   const entityName = props.actionParams.entityName || 'Item'
 
   return {
-    name: `Update ${entityName}`,
+    name: `Update${entityName}`,
     params: { id: props.row.id }
   }
 })

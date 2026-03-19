@@ -5,7 +5,19 @@
  * sorting, filtering, and CRUD operations.
  */
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSearch, faPlus, faEdit, faTrashAlt, faSpinner } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faSearch, faPlus, faEdit, faTrashAlt, faSpinner)
+
 import GridView from './src/components/GridView/index.vue'
+import GridActionsCell from './src/components/GridView/components/GridActionsCell.vue'
+import GridFilterCell from './src/components/GridView/components/GridFilterCell.vue'
+import DateRangeFilter from './src/components/GridView/components/filters/DateRangeFilter.vue'
+import CommonEditAction from './src/components/GridView/registries/components/CommonEditAction.vue'
+import CommonDeleteAction from './src/components/GridView/registries/components/CommonDeleteAction.vue'
+import CommonStatusAction from './src/components/GridView/registries/components/CommonStatusAction.vue'
+import CommonToggleAction from './src/components/GridView/registries/components/CommonToggleAction.vue'
 
 // Export main component
 export { GridView }
@@ -19,30 +31,27 @@ export { useGridActions } from './src/components/GridView/composables/useGridAct
 export { useFormatters } from './src/components/GridView/composables/useFormatters.js'
 
 // Export sub-components
-export { default as GridActionsCell } from './src/components/GridView/components/GridActionsCell.vue'
-export { default as GridFilterCell } from './src/components/GridView/components/GridFilterCell.vue'
-export { default as DateRangeFilter } from './src/components/GridView/components/DateRangeFilter.vue'
+export { GridActionsCell, GridFilterCell, DateRangeFilter }
 
 // Export registries
-export { 
-  registerCommonFormatter, 
-  getCommonFormatter, 
+export {
+  registerCommonFormatter,
+  getCommonFormatter,
   hasCommonFormatter,
-  getCommonFormatterNames 
+  getCommonFormatterNames
 } from './src/components/GridView/registries/formatters.js'
 
-export { 
-  registerActionComponent, 
-  getActionComponent, 
-  hasActionComponent 
+export {
+  registerActionComponent,
+  getActionComponent,
+  hasActionComponent
 } from './src/components/GridView/registries/actionComponents.js'
 
 // Export common formatters (available through formatters registry)
 export { commonFormatters } from './src/components/GridView/registries/formatters.js'
 
 // Export common action components
-export { default as CommonEditAction } from './src/components/GridView/registries/components/CommonEditAction.vue'
-export { default as CommonDeleteAction } from './src/components/GridView/registries/components/CommonDeleteAction.vue'
+export { CommonEditAction, CommonDeleteAction, CommonStatusAction, CommonToggleAction }
 
 // Note: GridUtils not available in this version
 
@@ -60,6 +69,8 @@ export default {
     // Register common action components globally
     app.component('CommonEditAction', CommonEditAction)
     app.component('CommonDeleteAction', CommonDeleteAction)
+    app.component('CommonStatusAction', CommonStatusAction)
+    app.component('CommonToggleAction', CommonToggleAction)
     
     // Provide global options
     if (options.globalOptions) {
@@ -67,6 +78,9 @@ export default {
     }
   }
 }
+
+// Export constants
+export { DEFAULT_ACTIONS, DEFAULT_ACTIONS_WITHOUT_STATUS } from './src/components/GridView/constants/index.js'
 
 // Version
 export const version = '1.0.0'

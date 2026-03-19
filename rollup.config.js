@@ -19,9 +19,7 @@ export default defineConfig([
       '@tanstack/vue-query',
       'vue-good-table-next',
       '@vuepic/vue-datepicker',
-      '@coreui/vue',
-      '@coreui/icons-vue',
-      'vue-i18n',
+'vue-i18n',
       '@fortawesome/fontawesome-svg-core',
       '@fortawesome/free-solid-svg-icons',
       '@fortawesome/vue-fontawesome',
@@ -53,7 +51,11 @@ export default defineConfig([
       }),
       postcss({
         extract: true,
-        minimize: true
+        minimize: true,
+        use: ['sass'],
+        sassOptions: {
+          api: 'modern'
+        }
       }),
       typescript({
         tsconfig: './tsconfig.json',

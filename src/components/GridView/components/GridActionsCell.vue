@@ -3,35 +3,20 @@
     <span
       v-for="(action, index) in column.actions"
       :key="index"
-      v-show="!action.action.visibilityResolver || action.action.visibilityResolver(row)"
+      v-show="isActionVisible(action, row)"
     >
-      <!-- Custom Vue Component Action -->
       <component
-        v-if="action.action.type === 'component'"
-        :is="getActionComponentByName(action.action.componentName)"
-        :row="row"
-        :all-rows="allRows"
-        :action-params="actionParams"
-        :load-items="loadItems"
-        v-bind="action.props || {}"
-        @deleted="handleActionEvent('deleted', $event)"
-        @error="handleActionEvent('error', $event)"
-      />
-      
-      <!-- Route Action -->
-      <router-link
-        v-else-if="action.action.type === 'route'"
-        :to="{
-          name: action.action.name ? action.action.name : action.action.nameResolver(actionParams),
-          params: action.action.paramsResolver(row),
-        }"
-        :class="action.class ? action.class : (action.classCallback ? action.classCallback(row) : '')"
-        :style="action.style"
-        :title="action.titleKey ? $t(action.titleKey) : action.title"
-      >
-        <CIcon v-if="action.icon" :content="action.icon" />
-        <span v-else>{{ action.labelKey ? $t(action.labelKey) : action.label }}</span>
-      </router-link>
+          :is="getActionComponentByName(action.componentName)"
+          :row="row"
+          :all-rows="allRows"
+          :action-params="actionParams"
+          :load-items="loadItems"
+          :update-route="updateRoute"
+          v-bind="action.props || {}"
+          @deleted="handleActionEvent('deleted', $event)"
+          @updated="handleActionEvent('updated', $event)"
+          @error="handleActionEvent('error', $event)"
+        />
     </span>
   </span>
   <span v-else>{{ $t('grid.operationsAreNotResolved') }}</span>
@@ -40,6 +25,7 @@
 <script setup>
 // defineProps and defineEmits are compiler macros, no import needed
 import { getActionComponent } from '../registries/actionComponents.js'
+import { isActionVisible } from '../composables/useActionVisibility.js'
 
 const props = defineProps({
   column: {
@@ -66,6 +52,11 @@ const props = defineProps({
   moduleActionComponents: {
     type: Object,
     default: () => ({})
+  },
+  // Route name for edit/update navigation
+  updateRoute: {
+    type: String,
+    default: ''
   }
 })
 
@@ -80,7 +71,7 @@ const getActionComponentByName = (componentName) => {
   if (props.moduleActionComponents && props.moduleActionComponents[componentName]) {
     return props.moduleActionComponents[componentName]
   }
-  
+
   // Fall back to common registry
   return getActionComponent(componentName)
 }

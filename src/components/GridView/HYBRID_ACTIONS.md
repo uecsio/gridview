@@ -195,13 +195,18 @@ import { ordersActionComponents } from './actionComponents.js'
 ```vue
 <!-- components/GridView/registries/components/CommonExportAction.vue -->
 <template>
-  <CButton @click="handleExport" :disabled="isExporting">
-    <CIcon v-if="!isExporting" :content="cilCloudDownload" />
-    <CSpinner v-else size="sm" />
-  </CButton>
+  <button
+    class="inline-flex items-center px-2 py-1 text-sm rounded hover:bg-gray-100 disabled:opacity-50"
+    @click="handleExport"
+    :disabled="isExporting"
+  >
+    <FontAwesomeIcon v-if="!isExporting" icon="cloud-download-alt" />
+    <FontAwesomeIcon v-else icon="spinner" spin />
+  </button>
 </template>
 
 <script setup>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // Component implementation
 </script>
 ```
@@ -234,12 +239,16 @@ export const actionComponents = {
 ```vue
 <!-- views/users/components/UsersBulkEditAction.vue -->
 <template>
-  <CButton @click="openBulkEditModal">
-    <CIcon :content="cilPencil" />
-  </CButton>
+  <button
+    class="inline-flex items-center px-2 py-1 text-sm text-blue-600 rounded hover:bg-blue-50"
+    @click="openBulkEditModal"
+  >
+    <FontAwesomeIcon icon="edit" />
+  </button>
 </template>
 
 <script setup>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // Users-specific bulk edit logic
 </script>
 ```

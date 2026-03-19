@@ -25,6 +25,11 @@ export function useGridEvents(props, updateParams, updateSelectedRows) {
    * Handle sort change event
    */
   const onSortChange = (params) => {
+    if (params[0].type === 'none') {
+      updateParams({ sort: [] })
+      return
+    }
+
     const fieldIndex = props.columns.findIndex((column) => column.field === params[0].field)
     if (fieldIndex > -1) {
       const column = props.columns[fieldIndex]
