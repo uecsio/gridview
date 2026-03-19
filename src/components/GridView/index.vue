@@ -23,7 +23,12 @@
         <div class="gv-card">
           <div class="gv-card-body">
             <h2 class="gv-card-title">{{ $t('grid.extendedSearch') }}</h2>
-            <!-- Extended filter form will go here -->
+            <FilterForm
+              :schema="extendedFilterSchema"
+              :model="extendedFilterForm"
+              @search="onExtendedFilterSearch"
+              @reset="onExtendedFilterReset"
+            />
           </div>
         </div>
       </div>
@@ -96,6 +101,7 @@ import { useGridActions } from './composables/useGridActions.js'
 import { useFormatters } from './composables/useFormatters.js'
 import GridActionsCell from './components/GridActionsCell.vue'
 import GridFilterCell from './components/GridFilterCell.vue'
+import FilterForm from '../../../../crud-form/src/FilterForm.vue'
 
 // Import GridView-specific styles
 import './styles/gridview-base.css'
@@ -238,6 +244,22 @@ const { processColumns } = useFormatters(props.moduleFormatters, t)
 const showExtendedFilter = ref(false)
 const updateExtendedFilterVisibility = () => {
   showExtendedFilter.value = !showExtendedFilter.value
+}
+
+// Extended filter handlers
+const onExtendedFilterSearch = (filterData) => {
+  const columnFilters = {}
+  for (const [key, value] of Object.entries(filterData)) {
+    if (value !== null && value !== undefined && value !== '') {
+      columnFilters[key] = value
+    }
+  }
+  onColumnFilter({ columnFilters })
+  showExtendedFilter.value = false
+}
+
+const onExtendedFilterReset = () => {
+  onColumnFilter({ columnFilters: {} })
 }
 
 // Direct filter handler (bypasses vue-good-table-next event system)

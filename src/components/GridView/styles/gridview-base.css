@@ -108,6 +108,11 @@
 }
 
 /* === Filter inputs === */
+.gv-input,
+.gv-select {
+  color-scheme: light;
+}
+
 .gv-input {
   width: 100%;
   padding: 0.25rem 0.5rem;
