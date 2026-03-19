@@ -7,14 +7,14 @@
           class="gv-btn gv-btn-primary"
           @click="updateExtendedFilterVisibility"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="gv-btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+          <FontAwesomeIcon icon="search" class="gv-btn-icon" />
           {{ $t('grid.extendedSearch') }}
         </button>
       </div>
       <div class="gv-toolbar-item gv-toolbar-item--end" v-if="addRoute">
-        <router-link :to="{ name: addRoute, params: addRouteParams }">
+        <router-link :to="{ name: addRoute, params: addRouteParams }" class="gv-btn-link">
           <button class="gv-btn gv-btn-success">
-            <svg xmlns="http://www.w3.org/2000/svg" class="gv-btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+            <FontAwesomeIcon icon="plus" class="gv-btn-icon" />
             {{ addText }}
           </button>
         </router-link>
@@ -23,7 +23,20 @@
         <div class="gv-card">
           <div class="gv-card-body">
             <h2 class="gv-card-title">{{ $t('grid.extendedSearch') }}</h2>
-            <!-- Extended filter form will go here -->
+            <vue-form-generator
+              :schema="translatedExtendedSchema"
+              :model="extendedFilterModel"
+              :options="{ validateAfterLoad: false }"
+            />
+            <div class="gv-extended-filter-actions">
+              <button class="gv-btn gv-btn-primary" @click="applyExtendedFilter">
+                <FontAwesomeIcon icon="search" class="gv-btn-icon" />
+                {{ $t('grid.search') }}
+              </button>
+              <button class="gv-btn gv-btn-outline" @click="resetExtendedFilter">
+                {{ $t('grid.reset') }}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -84,7 +97,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VueGoodTable } from 'vue-good-table-next'
 import 'vue-good-table-next/dist/vue-good-table-next.css'
@@ -94,6 +107,7 @@ import { useGridConfig } from './composables/useGridConfig.js'
 import { useGridColumns } from './composables/useGridColumns.js'
 import { useGridActions } from './composables/useGridActions.js'
 import { useFormatters } from './composables/useFormatters.js'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import GridActionsCell from './components/GridActionsCell.vue'
 import GridFilterCell from './components/GridFilterCell.vue'
 
@@ -238,6 +252,49 @@ const { processColumns } = useFormatters(props.moduleFormatters, t)
 const showExtendedFilter = ref(false)
 const updateExtendedFilterVisibility = () => {
   showExtendedFilter.value = !showExtendedFilter.value
+}
+
+// Extended filter form model and translated schema
+const extendedFilterModel = reactive({})
+
+const translatedExtendedSchema = computed(() => {
+  if (!props.extendedFilterSchema?.fields) return { fields: [] }
+  return {
+    ...props.extendedFilterSchema,
+    fields: props.extendedFilterSchema.fields.map(field => ({
+      ...field,
+      label: field.label ? t(field.label) : field.label,
+      placeholder: field.placeholder ? t(field.placeholder) : field.placeholder,
+    }))
+  }
+})
+
+// Apply extended filter values as column filters
+const applyExtendedFilter = () => {
+  const currentFilters = { ...gridData.value.serverParams.columnFilters }
+
+  for (const field of (props.extendedFilterSchema?.fields || [])) {
+    const value = extendedFilterModel[field.model]
+    if (value !== null && value !== undefined && value !== '') {
+      currentFilters[field.model] = value
+    } else {
+      delete currentFilters[field.model]
+    }
+  }
+
+  onColumnFilter({ columnFilters: currentFilters })
+}
+
+// Reset extended filter form and remove its filters
+const resetExtendedFilter = () => {
+  const currentFilters = { ...gridData.value.serverParams.columnFilters }
+
+  for (const field of (props.extendedFilterSchema?.fields || [])) {
+    extendedFilterModel[field.model] = ''
+    delete currentFilters[field.model]
+  }
+
+  onColumnFilter({ columnFilters: currentFilters })
 }
 
 // Direct filter handler (bypasses vue-good-table-next event system)

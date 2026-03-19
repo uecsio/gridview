@@ -23,6 +23,7 @@
     width: auto;
     flex-basis: 25%;
   }
+
   .gv-toolbar-item--end {
     margin-left: auto;
   }
@@ -56,21 +57,49 @@
 
 .gv-btn-primary {
   background-color: var(--color-primary, #5856d6);
-  color: var(--color-primary-content, #fff);
+  color: var(--color-btn-content, #fff);
   border-color: var(--color-primary, #5856d6);
 }
 
 .gv-btn-success {
   background-color: var(--color-success, #4dbd74);
-  color: var(--color-success-content, #fff);
+  color: var(--color-btn-content, #fff);
   border-color: var(--color-success, #4dbd74);
 }
 
+.gv-btn-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.gv-btn-link .gv-btn-success {
+  color: var(--color-btn-content, #fff);
+}
+
 .gv-btn-icon {
-  width: 1rem;
-  height: 1rem;
   margin-right: 0.5rem;
-  flex-shrink: 0;
+  font-size: 0.875rem;
+}
+
+.gv-btn-outline {
+  background-color: transparent;
+  color: var(--color-base-content, #212631);
+  border: 1px solid var(--color-base-300, #e7eaee);
+}
+
+.gv-btn-outline:hover {
+  background-color: var(--color-base-200, #f3f4f6);
+}
+
+/* === Extended filter actions === */
+.gv-extended-filter-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.gv-extended-filter-actions .gv-btn {
+  width: auto;
 }
 
 /* === Card (extended filter) === */
@@ -104,7 +133,9 @@
 }
 
 @keyframes gv-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* === Filter inputs === */

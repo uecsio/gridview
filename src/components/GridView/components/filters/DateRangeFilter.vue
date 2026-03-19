@@ -133,27 +133,24 @@ onBeforeUnmount(() => {
   font-family: inherit;
   font-weight: 400;
   line-height: 1.5;
-  color: #4f5d73;
-  background-color: #fff;
+  color: var(--color-base-content, #212631);
+  background-color: var(--color-base-100, #fff);
   background-clip: padding-box;
-  border: 1px solid #b1b7c1;
+  border: 1px solid var(--color-base-300, #e7eaee);
   border-radius: 0.375rem;
   appearance: none;
-  padding: 0.375rem 2rem 0.375rem 0.75rem;
-  height: calc(1.5em + 0.75rem + 2px);
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  padding: 0.25rem 2rem 0.25rem 0.5rem;
+  transition: border-color 0.15s ease;
 }
 
 :deep(.dp__input:hover) {
-  border-color: #b1b7c1;
+  border-color: var(--color-base-300, #e7eaee);
 }
 
 :deep(.dp__input:focus) {
-  color: #4f5d73;
-  background-color: #fff;
-  border-color: #b1b7c1;
-  outline: 0;
-  box-shadow: none;
+  outline: none;
+  border-color: var(--color-primary, #5856d6);
+  box-shadow: 0 0 0 2px rgba(88, 86, 214, 0.15);
 }
 
 :deep(.dp__input::placeholder) {
@@ -162,13 +159,24 @@ onBeforeUnmount(() => {
 }
 
 :deep(.dp__input_icon) {
+  position: absolute;
   right: 0.75rem;
   left: auto;
-  color: #4f5d73;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-base-content, #212631);
+}
+
+/* Hide calendar icon when clear icon is present */
+:deep(.dp__input_wrap:has(.dp__clear_icon) .dp__input_icon) {
+  display: none;
 }
 
 :deep(.dp__clear_icon) {
-  right: 2rem;
+  position: absolute;
+  right: 0.05rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* Calendar popup styling */

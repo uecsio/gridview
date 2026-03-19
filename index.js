@@ -5,6 +5,11 @@
  * sorting, filtering, and CRUD operations.
  */
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSearch, faPlus, faEdit, faTrashAlt, faSpinner } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faSearch, faPlus, faEdit, faTrashAlt, faSpinner)
+
 import GridView from './src/components/GridView/index.vue'
 import GridActionsCell from './src/components/GridView/components/GridActionsCell.vue'
 import GridFilterCell from './src/components/GridView/components/GridFilterCell.vue'
