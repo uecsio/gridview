@@ -146,7 +146,7 @@ export function useGridQuery(props) {
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey,
     queryFn: fetchGridData,
-    staleTime: 30000, // Cache for 30 seconds
+    staleTime: props.staleTime ?? 0,
     retry: 1,
     refetchOnWindowFocus: false,
   })
