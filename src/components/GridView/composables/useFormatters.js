@@ -51,22 +51,27 @@ export function useFormatters(moduleFormatters = {}, t = null) {
    */
   const processColumn = (column) => {
     if (!column.formatter) return column
-    
+
     const formatter = getFormatter(column.formatter)
     if (!formatter) {
       console.warn(`Formatter '${column.formatter}' not found`)
       return column
     }
-    
-    return {
-      ...column,
-      formatFn: (value) => {
-        const options = { ...column.formatterOptions }
-        if (t) {
-          options.t = t
-        }
-        return formatter(value, options)
+
+    const { formatter: formatterName, formatterOptions, formatRowValue, ...rest } = column
+    const options = { ...(formatterOptions || {}) }
+    if (t) options.t = t
+
+    if (formatRowValue) {
+      return {
+        ...rest,
+        rowFormatFn: (row) => formatter(row, options),
       }
+    }
+
+    return {
+      ...rest,
+      formatFn: (value) => formatter(value, options),
     }
   }
   
