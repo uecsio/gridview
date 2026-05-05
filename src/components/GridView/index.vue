@@ -216,6 +216,11 @@ const props = defineProps({
     required: false,
     default: null,
   },
+  staleTime: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
 })
 
 // Use TanStack Query for grid data management
