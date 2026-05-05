@@ -79,7 +79,8 @@
               @action-event="handleActionEvent"
             />
             <div v-else>
-              <span v-html="props.formattedRow[props.column.field]" />
+              <span v-if="props.column.rowFormatFn" v-html="props.column.rowFormatFn(props.row)" />
+              <span v-else v-html="props.formattedRow[props.column.field]" />
             </div>
           </template>
 
@@ -97,7 +98,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VueGoodTable } from 'vue-good-table-next'
 import 'vue-good-table-next/dist/vue-good-table-next.css'
@@ -116,6 +117,8 @@ import './styles/gridview-base.css'
 import './styles/action-links.scss'
 
 const { t } = useI18n()
+
+const emit = defineEmits(['selection-change'])
 
 const props = defineProps({
   id: {
@@ -224,7 +227,7 @@ const props = defineProps({
 })
 
 // Use TanStack Query for grid data management
-const { gridData, updateParams, updateSelectedRows, refetch, apiClient } = useGridQuery(props)
+const { gridData, updateParams, updateSelectedRows, refetch, apiClient, selectedRows } = useGridQuery(props)
 
 // Use grid event handlers composable
 const { 
@@ -370,6 +373,20 @@ const handleActionEvent = (event) => {
       console.log('Unknown action event:', event)
   }
 }
+
+defineExpose({
+  loadItems: refetch,
+  selectedRows,
+  gridData,
+})
+
+watch(
+  selectedRows,
+  (rows) => {
+    emit('selection-change', rows)
+  },
+  { deep: true }
+)
 </script>
 
 <style scoped>

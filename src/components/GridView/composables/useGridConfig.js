@@ -1,5 +1,11 @@
 import { computed } from 'vue'
 
+export const DEFAULT_GRID_SORT = 'id,DESC'
+
+export function effectiveDefaultSort(defaultSort) {
+  return (defaultSort && String(defaultSort).trim()) ? defaultSort : DEFAULT_GRID_SORT
+}
+
 /**
  * Composable for grid configuration options
  * Manages pagination, sorting, and selection settings for vue-good-table-next
@@ -28,12 +34,10 @@ export function useGridConfig(props, gridData, t) {
       enabled: true,
     }
     
-    // Set initial sort from props
-    if (props.defaultSort) {
-      options.initialSortBy = {
-        field: props.defaultSort.split(',')[0],
-        type: props.defaultSort.split(',')[1]?.toLowerCase() || 'desc'
-      }
+    const sort = effectiveDefaultSort(props.defaultSort)
+    options.initialSortBy = {
+      field: sort.split(',')[0],
+      type: sort.split(',')[1]?.toLowerCase() || 'desc'
     }
     
     return options

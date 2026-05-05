@@ -1,6 +1,7 @@
 import { ref, computed, watch } from 'vue'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { createApiClient } from '@uecsio/api-client'
+import { effectiveDefaultSort } from './useGridConfig.js'
 
 /**
  * Composable for fetching grid data using TanStack Query
@@ -46,8 +47,8 @@ export function useGridQuery(props) {
     // Add sorting
     if (serverParams.value.sort.length > 0) {
       url += `&sort=${serverParams.value.sort[0].field},${serverParams.value.sort[0].type.toUpperCase()}`
-    } else if (props.defaultSort) {
-      url += `&sort=${props.defaultSort}`
+    } else {
+      url += `&sort=${effectiveDefaultSort(props.defaultSort)}`
     }
     
     // Add column filters
@@ -58,6 +59,14 @@ export function useGridQuery(props) {
       }
     }
     
+    // Add select fields from column definitions
+    const fields = props.columns
+      .map(col => col.field)
+      .filter(f => f && f !== 'actions')
+    if (fields.length > 0) {
+      url += `&fields=${fields.join(',')}`
+    }
+
     // Add extra params
     if (props.extraParams) {
       url += props.extraParams
@@ -192,6 +201,7 @@ export function useGridQuery(props) {
   return {
     gridData,
     serverParams,
+    selectedRows,
     updateParams,
     updateSelectedRows,
     refetch,

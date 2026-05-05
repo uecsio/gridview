@@ -197,3 +197,19 @@
   text-align: center;
   padding: 2rem;
 }
+
+/* === Vue Good Table: default grid density (after vue-good-table-next.css) === */
+table.vgt-table {
+  font-size: 14px;
+}
+
+table.vgt-table td {
+  padding: 0.5rem;
+}
+
+/* Row actions column: center header, filters, and cell content */
+table.vgt-table th.vgt-col-actions,
+table.vgt-table td.vgt-col-actions {
+  text-align: center;
+  vertical-align: middle;
+}
